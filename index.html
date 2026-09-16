@@ -5,186 +5,251 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LogiCore — Calculadora Logística</title>
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#eef4ff}
-  .wrap{max-width:1180px;margin:auto;padding:28px}
-  h1{margin:0 0 6px;font-size:34px}
-  .sub{color:#9fb0c8;margin-bottom:24px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  .card{background:#121c2d;border:1px solid #26344a;border-radius:16px;padding:20px;box-shadow:0 10px 30px #0003}
-  .full{grid-column:1/-1}
-  label{display:block;font-size:13px;color:#aebbd0;margin:12px 0 6px}
-  input,select,button{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #33445d;background:#0d1727;color:#fff;font-size:14px}
-  button{cursor:pointer;background:#1d6cff;border-color:#1d6cff;font-weight:700}
-  button.secondary{background:#18263a;border-color:#33445d}
-  button.danger{background:#44202a;border-color:#713543}
-  .row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-  .transport{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .transport button{background:#18263a}
-  .transport button.active{background:#1d6cff;border-color:#6fa0ff}
-  .muted{color:#8fa1ba;font-size:12px}
-  .box{border:1px solid #2b3b53;border-radius:12px;padding:14px;margin-top:12px}
-  .boxhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .boxhead strong{font-size:15px}
-  .smallbtn{width:auto;padding:7px 10px;font-size:12px}
-  .results{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .metric{background:#0d1727;border:1px solid #26344a;border-radius:12px;padding:14px}
-  .metric span{display:block;color:#8fa1ba;font-size:12px;margin-bottom:5px}
-  .metric b{font-size:20px}
-  .bar{height:10px;background:#253249;border-radius:10px;overflow:hidden;margin-top:8px}
-  .bar i{display:block;height:100%;background:#4e8cff;width:0}
-  .note{padding:12px;border-radius:10px;background:#0d1727;border:1px solid #26344a;margin-top:14px}
-  .error{color:#ff9ea8}
-  .ok{color:#8ff0b0}
-  @media(max-width:800px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.transport{grid-template-columns:1fr 1fr}.results{grid-template-columns:1fr 1fr}}
-  @media(max-width:520px){.row,.row3{grid-template-columns:1fr}.results{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#eef4ff}
+.wrap{max-width:1180px;margin:auto;padding:28px}
+h1{margin:0 0 6px;font-size:34px}.sub{color:#9fb0c8;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#121c2d;border:1px solid #26344a;border-radius:16px;padding:20px;box-shadow:0 10px 30px #0003}
+.full{grid-column:1/-1}
+label{display:block;font-size:13px;color:#aebbd0;margin:12px 0 6px}
+input,select,button{width:100%;padding:11px 12px;border-radius:10px;border:1px solid #33445d;background:#0d1727;color:#fff;font-size:14px}
+button{cursor:pointer;background:#1d6cff;border-color:#1d6cff;font-weight:700}
+button.secondary{background:#18263a;border-color:#33445d}
+button.danger{background:#44202a;border-color:#713543}
+.row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.transport{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.transport button{background:#18263a}.transport button.active{background:#1d6cff;border-color:#6fa0ff}
+.muted{color:#8fa1ba;font-size:12px}
+.box{border:1px solid #2b3b53;border-radius:12px;padding:14px;margin-top:12px}
+.boxhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.smallbtn{width:auto;padding:7px 10px;font-size:12px}
+.results{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.metric{background:#0d1727;border:1px solid #26344a;border-radius:12px;padding:14px}
+.metric span{display:block;color:#8fa1ba;font-size:12px;margin-bottom:5px}.metric b{font-size:20px}
+.bar{height:10px;background:#253249;border-radius:10px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:#4e8cff;width:0}
+.note{padding:12px;border-radius:10px;background:#0d1727;border:1px solid #26344a;margin-top:14px}
+.custom{display:none}.custom.show{display:block}
+.hidden{display:none!important}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.transport{grid-template-columns:1fr 1fr}.results{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.row,.row3{grid-template-columns:1fr}.results{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>LogiCore</h1>
-  <div class="sub">Calculadora logística — transporte, carga, pallets y distribución.</div>
+<h1>LogiCore</h1>
+<div class="sub">Calculadora logística — transporte, carga, pallets y distribución.</div>
 
-  <div class="grid">
-    <section class="card full">
-      <h2>1. Medio de transporte</h2>
-      <div class="transport">
-        <button data-t="air" class="active">✈️ Avión</button>
-        <button data-t="truck">🚛 Camión</button>
-        <button data-t="ship">🚢 Barco</button>
-        <button data-t="container">📦 Contenedor</button>
-      </div>
-      <div id="transportConfig"></div>
-    </section>
+<div class="grid">
+<section class="card full">
+<h2>1. Medio de transporte</h2>
+<div class="transport">
+<button data-t="air" class="active">✈️ Avión</button>
+<button data-t="truck">🚛 Camión</button>
+<button data-t="ship">🚢 Barco</button>
+<button data-t="container">📦 Contenedor</button>
+</div>
+<div id="transportConfig"></div>
+</section>
 
-    <section class="card">
-      <h2>2. Tipos de cajas</h2>
-      <div class="muted">La cantidad se calcula automáticamente según peso y espacio.</div>
-      <div id="boxes"></div>
-      <button id="addBox" class="secondary" style="margin-top:12px">+ Agregar tipo de caja</button>
-    </section>
+<section class="card">
+<h2>2. Tipos de cajas</h2>
+<div class="muted">La cantidad se calcula automáticamente según peso y espacio.</div>
+<div id="boxes"></div>
+<button id="addBox" class="secondary" style="margin-top:12px">+ Agregar tipo de caja</button>
+</section>
 
-    <section class="card">
-      <h2>3. Método de distribución</h2>
-      <label>Método</label>
-      <select id="method">
-        <option value="balanced">Optimizado (peso + volumen)</option>
-        <option value="weight">Priorizar peso</option>
-        <option value="volume">Priorizar volumen</option>
-        <option value="equal">Distribución equitativa</option>
-      </select>
-      <label>Tipo de pallet</label>
-      <select id="palletType">
-        <option value="gma">Pallet americano (GMA)</option>
-      </select>
-      <div class="row3">
-        <div><label>Largo (cm)</label><input id="pl" type="number" value="120"></div>
-        <div><label>Ancho (cm)</label><input id="pw" type="number" value="100"></div>
-        <div><label>Altura máxima de carga (cm)</label><input id="ph" type="number" value="160"></div>
-      </div>
-      <label>Peso máximo por pallet (kg)</label>
-      <input id="pmax" type="number" value="1000">
-      <div class="note">
-        <b>🪵 Pallet utilizado</b><br>
-        Tipo: Pallet americano (GMA)<br>
-        Medidas: 120 × 100 cm<br>
-        Altura máxima de carga: 160 cm<br>
-        Peso máximo de referencia: 1.000 kg
-      </div>
-      <div class="note muted">El cálculo de pallets se mantiene simple: compara el volumen y el peso de la carga con la capacidad de referencia de cada pallet.</div>
-    </section>
+<section class="card">
+<h2>3. Método de distribución</h2>
+<label>Método</label>
+<select id="method">
+<option value="balanced">Optimizado (peso + volumen)</option>
+<option value="weight">Priorizar peso</option>
+<option value="volume">Priorizar volumen</option>
+<option value="equal">Distribución equitativa</option>
+</select>
 
-    <section class="card full">
-      <h2>4. Resultado</h2>
-      <div class="results">
-        <div class="metric"><span>Cajas totales</span><b id="rBoxes">0</b></div>
-        <div class="metric"><span>Pallets</span><b id="rPallets">0</b></div>
-        <div class="metric"><span>Peso total</span><b id="rWeight">0 kg</b></div>
-        <div class="metric"><span>Volumen</span><b id="rVolume">0 m³</b></div>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <div class="metric">
-          <span>Utilización de peso</span><b id="weightPct">0%</b>
-          <div class="bar"><i id="weightBar"></i></div>
-        </div>
-        <div class="metric">
-          <span>Utilización de volumen</span><b id="volumePct">0%</b>
-          <div class="bar"><i id="volumeBar"></i></div>
-        </div>
-      </div>
-      <div id="resultNote" class="note"></div>
-      <div id="distribution" class="note"></div>
-    </section>
-  </div>
+<label>Tipo de pallet</label>
+<select id="palletType">
+<option value="gma">Pallet americano (GMA)</option>
+<option value="euro">Europallet (EUR/EPAL)</option>
+<option value="iso">Pallet ISO</option>
+<option value="uk">Pallet británico (UK)</option>
+<option value="1100">Pallet cuadrado 1100 × 1100</option>
+<option value="1140">Pallet 1140 × 1140</option>
+<option value="custom">Pallet personalizado</option>
+<option value="none">🚫 Sin pallet</option>
+</select>
+
+<div id="standardPallet">
+<div class="row3">
+<div><label>Largo (cm)</label><input id="pl" type="number"></div>
+<div><label>Ancho (cm)</label><input id="pw" type="number"></div>
+<div><label>Altura máxima de carga (cm)</label><input id="ph" type="number"></div>
+</div>
+<label>Peso máximo por pallet (kg)</label>
+<input id="pmax" type="number">
+</div>
+
+<div id="customPallet" class="custom">
+<div class="note">
+<b>⚙️ Pallet personalizado</b>
+<div class="row3">
+<div><label>Largo (cm)</label><input id="cpl" type="number" value="120"></div>
+<div><label>Ancho (cm)</label><input id="cpw" type="number" value="100"></div>
+<div><label>Altura máxima (cm)</label><input id="cph" type="number" value="160"></div>
+</div>
+<label>Peso máximo (kg)</label>
+<input id="cpmax" type="number" value="1000">
+</div>
+</div>
+
+<div id="noPallet" class="note hidden">
+<b>🚫 Sin pallet</b><br>
+La mercancía se transportará directamente como carga suelta.<br>
+<b>Pallets necesarios: 0</b>
+</div>
+
+<div id="palletInfo" class="note"></div>
+<div class="note muted">El cálculo de pallets es deliberadamente simple: compara volumen y peso de la carga con la capacidad de referencia del pallet seleccionado. No realiza una simulación 3D.</div>
+</section>
+
+<section class="card full">
+<h2>4. Resultado</h2>
+<div class="results">
+<div class="metric"><span>Cajas totales</span><b id="rBoxes">0</b></div>
+<div class="metric"><span>Pallets</span><b id="rPallets">0</b></div>
+<div class="metric"><span>Peso total</span><b id="rWeight">0 kg</b></div>
+<div class="metric"><span>Volumen</span><b id="rVolume">0 m³</b></div>
+</div>
+<div class="row" style="margin-top:14px">
+<div class="metric"><span>Utilización de peso</span><b id="weightPct">0%</b><div class="bar"><i id="weightBar"></i></div></div>
+<div class="metric"><span>Utilización de volumen</span><b id="volumePct">0%</b><div class="bar"><i id="volumeBar"></i></div></div>
+</div>
+<div id="resultNote" class="note"></div>
+<div id="distribution" class="note"></div>
+</section>
+</div>
 </div>
 
 <script>
-const transportData = {
-  air: {label:"Boeing 767-300F",weight:54000,volume:438,dims:"Bodega de carga — valores de referencia editables"},
-  truck: {label:"Tractocamión + semirremolque",weight:28000,volume:90,dims:"Semirremolque estándar — valores de referencia editables"},
-  ship: {label:"Buque de carga",weight:100000,volume:1000,dims:"Capacidad de referencia editable"},
-  container: {label:"Contenedor 40' High Cube",weight:26700,volume:76.4,dims:"Dimensiones internas de referencia"}
+const transportData={
+air:{label:"Boeing 767-300F",weight:54000,volume:438,dims:"Bodega de carga — valores de referencia editables"},
+truck:{label:"Tractocamión + semirremolque",weight:28000,volume:90,dims:"Semirremolque estándar — valores de referencia editables"},
+ship:{label:"Buque de carga",weight:100000,volume:1000,dims:"Capacidad de referencia editable"},
+container:{label:"Contenedor 40' High Cube",weight:26700,volume:76.4,dims:"Dimensiones internas de referencia"}
 };
-let currentTransport = "air";
-let boxId = 0;
+const pallets={
+gma:{name:"Pallet americano (GMA)",l:120,w:100,h:160,max:1000},
+euro:{name:"Europallet (EUR/EPAL)",l:120,w:80,h:160,max:1000},
+iso:{name:"Pallet ISO",l:120,w:100,h:160,max:1000},
+uk:{name:"Pallet británico (UK)",l:120,w:100,h:160,max:1000},
+1100:{name:"Pallet cuadrado 1100 × 1100",l:110,w:110,h:160,max:1000},
+1140:{name:"Pallet 1140 × 1140",l:114,w:114,h:160,max:1000}
+};
+let currentTransport="air",boxId=0;
 
 function renderTransport(){
-  const d = transportData[currentTransport];
-  document.getElementById("transportConfig").innerHTML = `
-    <div class="row" style="margin-top:14px">
-      <div><label>Equipo seleccionado</label><input id="tname" value="${d.label}"></div>
-      <div><label>Capacidad máxima de peso (kg)</label><input id="tweight" type="number" value="${d.weight}"></div>
-    </div>
-    <div class="row">
-      <div><label>Volumen disponible (m³)</label><input id="tvolume" type="number" value="${d.volume}" step="0.01"></div>
-      <div><label>Descripción / dimensiones</label><input id="tdims" value="${d.dims}"></div>
-    </div>`;
-  document.querySelectorAll(".transport button").forEach(b=>b.classList.toggle("active",b.dataset.t===currentTransport));
-  calculate();
+const d=transportData[currentTransport];
+document.getElementById("transportConfig").innerHTML=`<div class="row" style="margin-top:14px">
+<div><label>Equipo seleccionado</label><input id="tname" value="${d.label}"></div>
+<div><label>Capacidad máxima de peso (kg)</label><input id="tweight" type="number" value="${d.weight}"></div>
+</div><div class="row"><div><label>Volumen disponible (m³)</label><input id="tvolume" type="number" value="${d.volume}" step="0.01"></div>
+<div><label>Descripción / dimensiones</label><input id="tdims" value="${d.dims}"></div></div>`;
+document.querySelectorAll(".transport button").forEach(b=>b.classList.toggle("active",b.dataset.t===currentTransport));
+document.getElementById("tweight").addEventListener("input",calculate);
+document.getElementById("tvolume").addEventListener("input",calculate);
+calculate();
 }
+
 function addBox(data){
-  boxId++;
-  const id=boxId;
-  const b=data||{name:"Caja "+id,l:60,w:40,h:40,weight:20};
-  const el=document.createElement("div"); el.className="box"; el.dataset.id=id;
-  el.innerHTML=`<div class="boxhead"><strong>Tipo de caja</strong><button class="danger smallbtn remove">Eliminar</button></div>
-  <label>Nombre</label><input class="name" value="${b.name}">
-  <div class="row3"><div><label>Largo (cm)</label><input class="l" type="number" min="1" value="${b.l}"></div><div><label>Ancho (cm)</label><input class="w" type="number" min="1" value="${b.w}"></div><div><label>Alto (cm)</label><input class="h" type="number" min="1" value="${b.h}"></div></div>
-  <label>Peso por caja (kg)</label><input class="weight" type="number" min="0.01" value="${b.weight}" step="0.01">`;
-  el.querySelector(".remove").onclick=()=>{el.remove();calculate()};
-  el.querySelectorAll("input").forEach(x=>x.addEventListener("input",calculate));
-  document.getElementById("boxes").appendChild(el);
+boxId++;const b=data||{name:"Caja "+boxId,l:60,w:40,h:40,weight:20};
+const el=document.createElement("div");el.className="box";
+el.innerHTML=`<div class="boxhead"><strong>Tipo de caja</strong><button class="danger smallbtn remove">Eliminar</button></div>
+<label>Nombre</label><input class="name" value="${b.name}">
+<div class="row3"><div><label>Largo (cm)</label><input class="l" type="number" min="1" value="${b.l}"></div>
+<div><label>Ancho (cm)</label><input class="w" type="number" min="1" value="${b.w}"></div>
+<div><label>Alto (cm)</label><input class="h" type="number" min="1" value="${b.h}"></div></div>
+<label>Peso por caja (kg)</label><input class="weight" type="number" min="0.01" value="${b.weight}" step="0.01">`;
+el.querySelector(".remove").onclick=()=>{el.remove();calculate()};
+el.querySelectorAll("input").forEach(x=>x.addEventListener("input",calculate));
+document.getElementById("boxes").appendChild(el);
 }
-function getBoxes(){return [...document.querySelectorAll(".box")].map(el=>({name:el.querySelector(".name").value||"Caja",l:+el.querySelector(".l").value,w:+el.querySelector(".w").value,h:+el.querySelector(".h").value,weight:+el.querySelector(".weight").value})).filter(b=>b.l>0&&b.w>0&&b.h>0&&b.weight>0)}
+
+function getBoxes(){return [...document.querySelectorAll(".box")].map(el=>({
+name:el.querySelector(".name").value||"Caja",
+l:+el.querySelector(".l").value,w:+el.querySelector(".w").value,h:+el.querySelector(".h").value,
+weight:+el.querySelector(".weight").value
+})).filter(b=>b.l>0&&b.w>0&&b.h>0&&b.weight>0)}
+
+function palletConfig(){
+const type=document.getElementById("palletType").value;
+const standard=document.getElementById("standardPallet"),custom=document.getElementById("customPallet"),none=document.getElementById("noPallet"),info=document.getElementById("palletInfo");
+if(type==="none"){
+standard.classList.add("hidden");custom.classList.remove("show");none.classList.remove("hidden");
+info.innerHTML="<b>Modo:</b> carga suelta — no se asignan pallets.";
+return {none:true,l:0,w:0,h:0,max:0};
+}
+none.classList.add("hidden");
+if(type==="custom"){
+standard.classList.add("hidden");custom.classList.add("show");
+const p={name:"Pallet personalizado",l:+cpl.value,w:+cpw.value,h:+cph.value,max:+cpmax.value};
+info.innerHTML=`<b>⚙️ ${p.name}</b><br>Medidas: ${p.l} × ${p.w} cm<br>Altura máxima: ${p.h} cm<br>Peso máximo: ${p.max.toLocaleString("es-CO")} kg`;
+return p;
+}
+custom.classList.remove("show");standard.classList.remove("hidden");
+const p=pallets[type];
+pl.value=p.l;pw.value=p.w;ph.value=p.h;pmax.value=p.max;
+info.innerHTML=`<b>🪵 ${p.name}</b><br>Medidas: ${p.l} × ${p.w} cm<br>Altura máxima: ${p.h} cm<br>Peso máximo de referencia: ${p.max.toLocaleString("es-CO")} kg`;
+return p;
+}
+
 function calculate(){
-  const tw=+(document.getElementById("tweight")?.value||0),tv=+(document.getElementById("tvolume")?.value||0),boxes=getBoxes();
-  if(!tw||!tv||!boxes.length){document.getElementById("resultNote").innerHTML='<span class="error">Completa los datos para calcular.</span>';return}
-  const method=document.getElementById("method").value; let ordered=[...boxes];
-  if(method==="weight")ordered.sort((a,b)=>b.weight-a.weight);
-  if(method==="volume")ordered.sort((a,b)=>(b.l*b.w*b.h)-(a.l*a.w*a.h));
-  if(method==="equal")ordered.sort((a,b)=>a.name.localeCompare(b.name));
-  let remainingW=tw,remainingV=tv,totalBoxes=0,totalWeight=0,totalVolume=0;const counts={};let madeProgress=true;
-  while(madeProgress){madeProgress=false;for(const b of ordered){const v=(b.l*b.w*b.h)/1e6;if(v<=remainingV&&b.weight<=remainingW){counts[b.name]=(counts[b.name]||0)+1;totalBoxes++;totalWeight+=b.weight;totalVolume+=v;remainingW-=b.weight;remainingV-=v;madeProgress=true}}if(totalBoxes>100000)break}
-  const palletVolume=((+document.getElementById("pl").value||1)*(+document.getElementById("pw").value||1)*(+document.getElementById("ph").value||1))/1e6,pmax=+(document.getElementById("pmax").value)||1;
-  const pallets=Math.max(0,Math.ceil(Math.max(totalVolume/palletVolume,totalWeight/pmax))),wp=Math.min(100,totalWeight/tw*100),vp=Math.min(100,totalVolume/tv*100);
-  document.getElementById("rBoxes").textContent=totalBoxes.toLocaleString("es-CO");
-  document.getElementById("rPallets").textContent=pallets.toLocaleString("es-CO");
-  document.getElementById("rWeight").textContent=totalWeight.toLocaleString("es-CO",{maximumFractionDigits:1})+" kg";
-  document.getElementById("rVolume").textContent=totalVolume.toLocaleString("es-CO",{maximumFractionDigits:2})+" m³";
-  document.getElementById("weightPct").textContent=wp.toFixed(1)+"%";document.getElementById("volumePct").textContent=vp.toFixed(1)+"%";
-  document.getElementById("weightBar").style.width=wp+"%";document.getElementById("volumeBar").style.width=vp+"%";
-  const limiting=wp>=vp?"peso":"volumen";
-  document.getElementById("resultNote").innerHTML=`<b>Factor limitante aproximado: ${limiting.toUpperCase()}</b><br>Se utilizaron ${wp.toFixed(1)}% de la capacidad de peso y ${vp.toFixed(1)}% del volumen disponible.`;
-  const lines=Object.entries(counts).map(([name,n])=>`<div>• <b>${name}</b>: ${n.toLocaleString("es-CO")} cajas</div>`).join("");
-  document.getElementById("distribution").innerHTML=`<b>Distribución calculada</b><br>${lines||"No hay cajas que puedan ser cargadas con las restricciones actuales."}`;
+if(!document.getElementById("tweight"))return;
+const tw=+tweight.value||0,tv=+tvolume.value||0,boxes=getBoxes();
+const p=palletConfig();
+if(!tw||!tv||!boxes.length){resultNote.innerHTML='<span class="error">Completa los datos para calcular.</span>';return}
+const method=document.getElementById("method").value;
+let ordered=[...boxes];
+if(method==="weight")ordered.sort((a,b)=>b.weight-a.weight);
+if(method==="volume")ordered.sort((a,b)=>(b.l*b.w*b.h)-(a.l*a.w*a.h));
+if(method==="equal")ordered.sort((a,b)=>a.name.localeCompare(b.name));
+let remainingW=tw,remainingV=tv,totalBoxes=0,totalWeight=0,totalVolume=0;const counts={};
+let madeProgress=true;
+while(madeProgress){
+madeProgress=false;
+for(const b of ordered){
+const v=b.l*b.w*b.h/1e6;
+if(v<=remainingV&&b.weight<=remainingW){
+counts[b.name]=(counts[b.name]||0)+1;totalBoxes++;totalWeight+=b.weight;totalVolume+=v;
+remainingW-=b.weight;remainingV-=v;madeProgress=true;
+}}
+if(totalBoxes>100000)break;
+}
+const palletVolume=p.none?0:(p.l*p.w*p.h/1e6);
+const pallets=p.none?0:Math.max(0,Math.ceil(Math.max(totalVolume/palletVolume,totalWeight/p.max)));
+const wp=Math.min(100,totalWeight/tw*100),vp=Math.min(100,totalVolume/tv*100);
+rBoxes.textContent=totalBoxes.toLocaleString("es-CO");rPallets.textContent=pallets.toLocaleString("es-CO");
+rWeight.textContent=totalWeight.toLocaleString("es-CO",{maximumFractionDigits:1})+" kg";
+rVolume.textContent=totalVolume.toLocaleString("es-CO",{maximumFractionDigits:2})+" m³";
+weightPct.textContent=wp.toFixed(1)+"%";volumePct.textContent=vp.toFixed(1)+"%";
+weightBar.style.width=wp+"%";volumeBar.style.width=vp+"%";
+const limiting=wp>=vp?"peso":"volumen";
+resultNote.innerHTML=`<b>Factor limitante aproximado: ${limiting.toUpperCase()}</b><br>Se utilizaron ${wp.toFixed(1)}% de la capacidad de peso y ${vp.toFixed(1)}% del volumen disponible.`;
+const lines=Object.entries(counts).map(([name,n])=>`<div>• <b>${name}</b>: ${n.toLocaleString("es-CO")} cajas</div>`).join("");
+distribution.innerHTML=`<b>Distribución calculada</b><br>${lines||"No hay cajas que puedan ser cargadas con las restricciones actuales."}`;
 }
 
 document.querySelectorAll(".transport button").forEach(b=>b.onclick=()=>{currentTransport=b.dataset.t;renderTransport()});
+addBox({name:"Caja A",l:60,w:40,h:40,weight:20});
+addBox({name:"Caja B",l:80,w:50,h:40,weight:25});
+addBox({name:"Caja C",l:100,w:60,h:50,weight:40});
 document.getElementById("addBox").onclick=()=>{addBox();calculate()};
-["method","pl","pw","ph","pmax"].forEach(id=>document.getElementById(id).addEventListener("input",calculate));
+["method","pl","pw","ph","pmax","cpl","cpw","cph","cpmax"].forEach(id=>document.getElementById(id).addEventListener("input",calculate));
 document.getElementById("palletType").addEventListener("change",calculate);
-addBox({name:"Caja A",l:60,w:40,h:40,weight:20});addBox({name:"Caja B",l:80,w:50,h:40,weight:25});addBox({name:"Caja C",l:100,w:60,h:50,weight:40});renderTransport();
+renderTransport();
 </script>
 </body>
 </html>
